@@ -3,9 +3,9 @@ package main
 import (
 	"bookstore_go_v1/internal/config"
 	"bookstore_go_v1/internal/handlers"
-	"bookstore_go_v1/internal/middlewares"
 	"bookstore_go_v1/internal/models"
 	"bookstore_go_v1/internal/repositories"
+	"bookstore_go_v1/internal/router"
 	"bookstore_go_v1/internal/services"
 	"log"
 
@@ -49,23 +49,11 @@ func main() {
 
     // Public routes
     public := r.Group("/api/v1")
-    {
-        public.POST("/register", authHandler.Register)
-        public.POST("/login", authHandler.Login)
-        public.POST("/refresh-token", authHandler.RefreshToken)
-    }
+    router.SetupPublicRoutes(public, authHandler)
 
-    // Protected routes (require authentication)
+    // Protected routes
     protected := r.Group("/api/v1")
-    protected.Use(middlewares.AuthMiddleware())
-    {
-        protected.POST("/logout", authHandler.Logout)
-        protected.POST("/books", bookHandler.CreateBook)
-        protected.GET("/books", bookHandler.GetAllBooks)
-        protected.GET("/books/:id", bookHandler.GetBookByID)
-        protected.PUT("/books/:id", bookHandler.UpdateBook)
-        protected.DELETE("/books/:id", bookHandler.DeleteBook)
-    }
+    router.SetupProtectedRoutes(protected, authHandler, bookHandler)
 
     // Start server
     log.Printf("Server running on port %s", cfg.AppPort)
