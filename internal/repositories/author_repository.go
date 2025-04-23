@@ -16,7 +16,11 @@ type authorRepository struct {
 
 // GetAuthorByID implements AuthorRepository.
 func (a *authorRepository) GetAuthorByID(id int) (*models.Author, error) {
-	panic("unimplemented")
+	var author models.Author
+	if err := a.db.First(&author, id).Error; err != nil {
+		return nil, err
+	}
+	return &author, nil
 }
 
 func NewAuthorRepository(db *gorm.DB) AuthorRepository {

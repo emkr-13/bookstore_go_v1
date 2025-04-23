@@ -1,13 +1,14 @@
 package services
 
 import (
-    "bookstore_go_v1/internal/models"
-    "bookstore_go_v1/internal/repositories"
-    "errors"
-    "time"
+	"bookstore_go_v1/internal/models"
+	"bookstore_go_v1/internal/repositories"
+	"errors"
+	"strconv"
+	"time"
 
-    "github.com/golang-jwt/jwt/v5"
-    "golang.org/x/crypto/bcrypt"
+	"github.com/golang-jwt/jwt/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type AuthService interface {
@@ -63,7 +64,7 @@ func (s *authService) Login(username, password string) (string, string, error) {
     }
 
     authClaims := jwt.MapClaims{
-        "sub": user.ID.String(),
+        "sub": strconv.Itoa(user.ID),
         "exp": time.Now().Add(time.Second * time.Duration(s.authExp)).Unix(),
     }
 
@@ -71,7 +72,7 @@ func (s *authService) Login(username, password string) (string, string, error) {
     authToken, _ := authJwt.SignedString([]byte(s.secret))
 
     refreshClaims := jwt.MapClaims{
-        "sub": user.ID.String(),
+        "sub": strconv.Itoa(user.ID),
         "exp": time.Now().Add(time.Second * time.Duration(s.refreshExp)).Unix(),
     }
 
@@ -79,7 +80,7 @@ func (s *authService) Login(username, password string) (string, string, error) {
     refreshToken, _ := refreshJwt.SignedString([]byte(s.secret))
 
     expTime := time.Now().Add(time.Second * time.Duration(s.refreshExp)).Unix()
-    s.userRepo.UpdateRefreshToken(user.ID.String(), refreshToken, expTime)
+    s.userRepo.UpdateRefreshToken(strconv.Itoa(user.ID), refreshToken, expTime)
 
     return authToken, refreshToken, nil
 }
@@ -95,15 +96,15 @@ func (s *authService) RefreshToken(refreshToken string) (string, string, error) 
     }
 
     authClaims := jwt.MapClaims{
-        "sub": user.ID.String(),
+        "sub": strconv.Itoa(user.ID),
         "exp": time.Now().Add(time.Second * time.Duration(s.authExp)).Unix(),
     }
 
     authJwt := jwt.NewWithClaims(jwt.SigningMethodHS256, authClaims)
     authToken, _ := authJwt.SignedString([]byte(s.secret))
 
-    newRefreshToken, newRefreshExp := generateRefreshToken(s.secret, s.refreshExp, user.ID.String())
-    s.userRepo.UpdateRefreshToken(user.ID.String(), newRefreshToken, newRefreshExp)
+    newRefreshToken, newRefreshExp := generateRefreshToken(s.secret, s.refreshExp, strconv.Itoa(user.ID))
+    s.userRepo.UpdateRefreshToken(strconv.Itoa(user.ID), newRefreshToken, newRefreshExp)
 
     return authToken, newRefreshToken, nil
 }
