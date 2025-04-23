@@ -31,7 +31,7 @@ func (h *AuthHandler) Register(c *gin.Context) {
         return
     }
 
-    c.Status(http.StatusNoContent)
+    c.JSON(http.StatusNoContent, gin.H{"message": "User registered successfully"})
 }
 
 func (h *AuthHandler) Login(c *gin.Context) {
@@ -52,6 +52,7 @@ func (h *AuthHandler) Login(c *gin.Context) {
     }
 
     c.JSON(http.StatusOK, gin.H{
+        "message":        "Login successful",
         "access_token":  authToken,
         "refresh_token": refreshToken,
     })
@@ -74,6 +75,7 @@ func (h *AuthHandler) RefreshToken(c *gin.Context) {
     }
 
     c.JSON(http.StatusOK, gin.H{
+        "message":        "Token refreshed successfully",
         "access_token":  authToken,
         "refresh_token": refreshToken,
     })
@@ -86,5 +88,5 @@ func (h *AuthHandler) Logout(c *gin.Context) {
         return
     }
 
-    c.Status(http.StatusNoContent)
+    c.JSON(http.StatusNoContent, gin.H{"message": "Logged out successfully"})
 }

@@ -30,7 +30,10 @@ func (h *BookHandler) CreateBook(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusCreated, createdBook)
+    c.JSON(http.StatusCreated, gin.H{
+        "data":    createdBook,
+        "message": "Book created successfully",
+    })
 }
 
 func (h *BookHandler) GetAllBooks(c *gin.Context) {
@@ -40,7 +43,10 @@ func (h *BookHandler) GetAllBooks(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, books)
+    c.JSON(http.StatusOK, gin.H{
+        "data":    books,
+        "message": "Books retrieved successfully",
+    })
 }
 
 func (h *BookHandler) GetBookByID(c *gin.Context) {
@@ -57,7 +63,10 @@ func (h *BookHandler) GetBookByID(c *gin.Context) {
         return
     }
 
-    c.JSON(http.StatusOK, book)
+    c.JSON(http.StatusOK, gin.H{
+        "data":    book,
+        "message": "Book retrieved successfully",
+    })
 }
 
 func (h *BookHandler) UpdateBook(c *gin.Context) {
@@ -80,7 +89,9 @@ func (h *BookHandler) UpdateBook(c *gin.Context) {
         return
     }
 
-    c.Status(http.StatusNoContent)
+    c.JSON(http.StatusNoContent, gin.H{
+        "message": "Book updated successfully",
+    })
 }
 
 func (h *BookHandler) DeleteBook(c *gin.Context) {
@@ -96,5 +107,7 @@ func (h *BookHandler) DeleteBook(c *gin.Context) {
         return
     }
 
-    c.Status(http.StatusNoContent)
+    c.JSON(http.StatusNoContent, gin.H{
+        "message": "Book deleted successfully",
+    })
 }
