@@ -74,6 +74,7 @@ These endpoints do not require authentication:
 
 These endpoints require authentication (JWT token in the `Authorization` header):
 
+#### Book Management
 - **Logout**: `POST /api/v1/logout`
 - **Create Book**: `POST /api/v1/books`
   - Request body:
@@ -98,6 +99,48 @@ These endpoints require authentication (JWT token in the `Authorization` header)
     }
     ```
 - **Delete Book**: `DELETE /api/v1/books/:id`
+
+#### Publisher Management
+- **Create Publisher**: `POST /api/v1/publishers`
+  - Request body:
+    ```json
+    {
+      "name": "Publisher Name",
+      "address": "Publisher Address"
+    }
+    ```
+- **Get All Publishers**: `GET /api/v1/publishers`
+- **Get Publisher by ID**: `GET /api/v1/publishers/:id`
+- **Update Publisher**: `PUT /api/v1/publishers/:id`
+  - Request body:
+    ```json
+    {
+      "name": "Updated Publisher Name",
+      "address": "Updated Publisher Address"
+    }
+    ```
+- **Delete Publisher**: `DELETE /api/v1/publishers/:id`
+
+#### Author Management
+- **Create Author**: `POST /api/v1/authors`
+  - Request body:
+    ```json
+    {
+      "name": "Author Name",
+      "bio": "Author Biography"
+    }
+    ```
+- **Get All Authors**: `GET /api/v1/authors`
+- **Get Author by ID**: `GET /api/v1/authors/:id`
+- **Update Author**: `PUT /api/v1/authors/:id`
+  - Request body:
+    ```json
+    {
+      "name": "Updated Author Name",
+      "bio": "Updated Author Biography"
+    }
+    ```
+- **Delete Author**: `DELETE /api/v1/authors/:id`
 
 ## Configuration
 

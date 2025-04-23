@@ -39,10 +39,14 @@ func main() {
     // Initialize services
     authService := services.NewAuthService(userRepo, cfg.JWTSecret, cfg.AuthExp, cfg.RefreshExp)
     bookService := services.NewBookService(bookRepo, authorRepo, publisherRepo)
+    authorService := services.NewAuthorService(authorRepo)
+    publisherService := services.NewPublisherService(publisherRepo)
 
     // Initialize handlers
     authHandler := handlers.NewAuthHandler(authService)
     bookHandler := handlers.NewBookHandler(bookService)
+    authorHandler := handlers.NewAuthorHandler(authorService)
+    publisherHandler := handlers.NewPublisherHandler(publisherService)
 
     // Setup Gin router
     r := gin.Default()
@@ -53,7 +57,7 @@ func main() {
 
     // Protected routes
     protected := r.Group("/api/v1")
-    router.SetupProtectedRoutes(protected, authHandler, bookHandler)
+    router.SetupProtectedRoutes(protected, authHandler, bookHandler, publisherHandler, authorHandler)
 
     // Start server
     log.Printf("Server running on port %s", cfg.AppPort)
